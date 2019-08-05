@@ -39,13 +39,13 @@
                 foreach($column->childNodes as $child) {
                     if($child->nodeName === "span") {
                         if($child->nodeValue[0] !== '#') {
-                            $inCellLessons[$index]['activity'] = trim($child->nodeValue);
+                            $inCellLessons[$index]['activity_name'] = trim($child->nodeValue);
                             $index++;
                         }
                     }
 
                     if($child->nodeName === "#text") {
-                        $inCellLessons[$index - 1]['activity'] .= trim($child->nodeValue);
+                        $inCellLessons[$index - 1]['activity_name'] .= trim($child->nodeValue);
                     }
 
                     if($child->nodeName === "a") {
@@ -54,7 +54,23 @@
                 }
 
                 foreach($inCellLessons as &$lesson) {
+                    $lesson_week = substr($lesson['activity_name'], strpos($lesson['activity_name'], '-'));
+                    $lesson['activity'] = substr($lesson['activity_name'], 0, strpos($lesson['activity_name'], '-'));
                     
+                    $lesson['odd_week'] = false;
+                    $lesson['even_week'] = false;
+
+                    if(strpos($lesson_week, "N")) {
+                        $lesson['odd_week'] = true;
+                    }
+                    if(strpos($lesson_week, "P")) {
+                        $lesson['even_week'] = true;
+                    }
+
+                    if(!$lesson['odd_week'] && !$lesson['even_week']) {
+                        $lesson['odd_week'] = true;
+                        $lesson['even_week'] = true;
+                    }
                 }
 
                 $lessons[$numberToDay[$j - 2]][$hour] = $inCellLessons;
