@@ -1,0 +1,16 @@
+{
+    "name": "Plan zajęć PK",
+    "short_name": "Plan zajęć",
+    "start_url": "./",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "./img/icons/favicon.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        }
+    ]
+}
