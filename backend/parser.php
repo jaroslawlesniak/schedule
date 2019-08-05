@@ -55,7 +55,11 @@
 
                 foreach($inCellLessons as &$lesson) {
                     $lesson_week = substr($lesson['activity_name'], strpos($lesson['activity_name'], '-'));
-                    $lesson['activity'] = substr($lesson['activity_name'], 0, strpos($lesson['activity_name'], '-'));
+                    if(strpos($lesson['activity_name'], '-') !== false) {
+                        $lesson['activity'] = substr($lesson['activity_name'], 0, strpos($lesson['activity_name'], '-'));
+                    } else {
+                        $lesson['activity'] = $lesson['activity_name'];
+                    }
                     
                     $lesson['odd_week'] = false;
                     $lesson['even_week'] = false;
