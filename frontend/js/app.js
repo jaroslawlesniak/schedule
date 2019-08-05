@@ -52,7 +52,30 @@ function prepareDay(d) {
     const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
 
     if(d > 0 && d <= 5) {
-        console.log("save day");
+        let checkboxex = document.querySelectorAll('input:checked');
+        let day = days[d - 1];
+
+        schedule[day] = [];
+        for(let chbox of checkboxex) {
+            
+            let hour = chbox.getAttribute('data-hour');
+            if(schedule[day][hour]) {
+                schedule[day][hour].push({
+                    "acvtivity": chbox.getAttribute('data-name'),
+                    "classroom": chbox.getAttribute('data-classroom'),
+                    "even_week": chbox.getAttribute('data-even_week'),
+                    "odd_week": chbox.getAttribute('data-odd_week')
+                });
+            } else {
+                schedule[day][hour] = [];
+                schedule[day][hour].push({
+                    "acvtivity": chbox.getAttribute('data-name'),
+                    "classroom": chbox.getAttribute('data-classroom'),
+                    "even_week": chbox.getAttribute('data-even_week'),
+                    "odd_week": chbox.getAttribute('data-odd_week')
+                });
+            }
+        }
     }
 
     if(d < 5) {
@@ -73,7 +96,7 @@ function prepareDay(d) {
                 
                 document.querySelector("#h" + hourIndex).innerHTML += `
                     <div class="option">
-                        <label><input type="checkbox" data-name='${activity.activity}' data-classroom='${activity.classroom}' even_week='${activity.even_week}' odd_week='${activity.odd_week}'/>${activity.activity_name}</label>
+                        <label><input type="checkbox" data-hour='${hour}' data-name='${activity.activity}' data-classroom='${activity.classroom}' data-even_week='${activity.even_week}' data-odd_week='${activity.odd_week}'/>${activity.activity_name}</label>
                     </div>
                 `;
             }
