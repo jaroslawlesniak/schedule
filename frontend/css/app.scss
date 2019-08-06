@@ -8,32 +8,46 @@ body {
 header {
     background-color: #0c3d75;
     color: #fff;
-    padding: 15px;
-    padding-bottom: 0px;
     display: none;
-}
 
-h1 {
-    margin: 0;
-    margin-bottom: 25px;
+    button {
+        float: right;
+        padding: 10px;
+        background-color: #fff;
+        border: none;
+        outline: none;
+        font-weight: bold;
+        margin-top: -5px;
+    }
+
+    
+    h1 {
+        margin: 0;
+        margin-bottom: 25px;
+        font-weight: normal;
+        padding: 15px;
+    }
 }
 
 ul {
     list-style-type: none;
     padding: 0px;
+    width: 100%;
+    white-space: nowrap;
+    overflow: auto;
 
     li {
         display: inline-block;
         padding: 15px;
         border-bottom: 5px solid #0c3d75;
         padding-bottom: 10px;
+        color: #4c7cb3;
         cursor: pointer;
 
         &.active, &:hover {
             border-bottom: 5px solid #2c62a0;
+            color: #fff;
         }
-
-        
     }
 }
 
@@ -69,6 +83,11 @@ ul {
         border: 1px solid #ddd;
         margin-top: 15px;
         padding: 10px;
+        border-radius: 10px;
+
+        &:first-child {
+            margin-top: 0px;
+        }
 
         > span {
             margin-bottom: 15px;
@@ -85,5 +104,17 @@ ul {
     .activity {
         font-size: 20px;
         margin-bottom: 5px;
+    }
+}
+
+.configure {
+    margin-top: -15px;
+
+    h1 {
+        margin: 0px;
+        padding: 20px 10px;
+        background-color: #f8f8f8;
+        font-weight: normal;
+        font-size: 20px;
     }
 }

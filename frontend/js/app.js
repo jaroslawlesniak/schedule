@@ -10,11 +10,6 @@ let week_type = "even";
 let currentPreparePage = 0;
 const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
 
-if(localStorage.getItem('url') === null) {
-    url = prompt("Wpisz adres URL planu zajęć");
-    localStorage.setItem('url', url);
-}
-
 let links = document.querySelectorAll('.navigation li');
 
 for(let link of links) {
@@ -26,23 +21,27 @@ for(let link of links) {
     })
 }
 
-if(localStorage.getItem("data") !== null) {
-    data = JSON.parse(localStorage.getItem("data"));
+if(url === null) {
+    configureApp();
 }
 
-if(localStorage.getItem("schedule") !== null) {
-    schedule = JSON.parse(localStorage.getItem("schedule"));
-    displaySchedule(0);
-}
+// if(localStorage.getItem("data") !== null) {
+//     data = JSON.parse(localStorage.getItem("data"));
+// }
 
-fetch(`https://api.jaroslawlesniak.pl/schedule/parser.php?url=${url}`)
-.then(e => e.json())
-.then(e => {
-    if(JSON.stringify(e) !== localStorage.getItem("data")) {
-        localStorage.setItem("data", JSON.stringify(e));
-        schedule = {};
-    }
-});
+// if(localStorage.getItem("schedule") !== null) {
+//     schedule = JSON.parse(localStorage.getItem("schedule"));
+//     displaySchedule(0);
+// }
+
+// fetch(`https://api.jaroslawlesniak.pl/schedule/parser.php?url=${url}`)
+// .then(e => e.json())
+// .then(e => {
+//     if(JSON.stringify(e) !== localStorage.getItem("data")) {
+//         localStorage.setItem("data", JSON.stringify(e));
+//         schedule = {};
+//     }
+// });
 
 function prepareSchedule() {
     let container = document.querySelector(".container");
@@ -168,6 +167,14 @@ function changeWeek(e) {
     displaySchedule(current_day);
 }
 
-if(Object.keys(schedule).length === 0 && schedule.constructor === Object) {
-    prepareSchedule();
+function configureApp() {
+    let container = document.querySelector(".configure");
+
+    container.innerHTML = `
+        <h1>Test</h1>
+    `;
 }
+
+// if(Object.keys(schedule).length === 0 && schedule.constructor === Object) {
+//     prepareSchedule();
+// }

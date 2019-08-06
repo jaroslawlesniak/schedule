@@ -8,19 +8,32 @@ body {
 header {
   background-color: #0c3d75;
   color: #fff;
-  padding: 15px;
-  padding-bottom: 0px;
   display: none;
 }
 
-h1 {
+header button {
+  float: right;
+  padding: 10px;
+  background-color: #fff;
+  border: none;
+  outline: none;
+  font-weight: bold;
+  margin-top: -5px;
+}
+
+header h1 {
   margin: 0;
   margin-bottom: 25px;
+  font-weight: normal;
+  padding: 15px;
 }
 
 ul {
   list-style-type: none;
   padding: 0px;
+  width: 100%;
+  white-space: nowrap;
+  overflow: auto;
 }
 
 ul li {
@@ -28,11 +41,13 @@ ul li {
   padding: 15px;
   border-bottom: 5px solid #0c3d75;
   padding-bottom: 10px;
+  color: #4c7cb3;
   cursor: pointer;
 }
 
 ul li.active, ul li:hover {
   border-bottom: 5px solid #2c62a0;
+  color: #fff;
 }
 
 .container {
@@ -63,6 +78,11 @@ ul li.active, ul li:hover {
   border: 1px solid #ddd;
   margin-top: 15px;
   padding: 10px;
+  border-radius: 10px;
+}
+
+.container .option:first-child {
+  margin-top: 0px;
 }
 
 .container .option > span {
@@ -79,5 +99,17 @@ ul li.active, ul li:hover {
 .container .activity {
   font-size: 20px;
   margin-bottom: 5px;
+}
+
+.configure {
+  margin-top: -15px;
+}
+
+.configure h1 {
+  margin: 0px;
+  padding: 20px 10px;
+  background-color: #f8f8f8;
+  font-weight: normal;
+  font-size: 20px;
 }
 /*# sourceMappingURL=app.css.map */

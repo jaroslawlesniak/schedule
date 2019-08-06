@@ -8,12 +8,16 @@
     <link rel="stylesheet" href="./css/app.css" type="text/css">
     <link rel="stylesheet" href="./css/fontello.css" type="text/css">
     <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" content="#0c3d75">
 </head>
 <body>
     <header>
         <nav>
-            <h1>Plan zajęć</h1>
+            <h1>
+                Plan zajęć
+                <button onclick="configureApp()"><i class="icon-cog"></i></button>
+                <button onclick="changeWeek(this)">Parzysty</button>
+            </h1>
             <ul class="navigation">
                 <li class="active" data-day="0">Poniedziałek</li>
                 <li data-day="1">Wtorek</li>
@@ -22,10 +26,10 @@
                 <li data-day="4">Piątek</li>
             </ul>
         </nav>
-        <button onclick="changeWeek(this)">Parzysty</button>
     </header>
     <main>
         <div class="container"></div>
+        <div class="configure"></div>
     </main>
     <script src="./js/app.js"></script>
 </body>
