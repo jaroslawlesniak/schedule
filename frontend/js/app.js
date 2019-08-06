@@ -167,12 +167,45 @@ function changeWeek(e) {
     displaySchedule(current_day);
 }
 
+let grades = [];
+
 function configureApp() {
     let container = document.querySelector(".configure");
+    document.querySelector("meta[name=theme-color").setAttribute("content", "#ffffff");
 
     container.innerHTML = `
-        <h1>Test</h1>
+         <div class="header">
+            <h1>Grupa</h1>
+            <input type="text" name="url" placeholder="Wyszukaj nazwę oddziału" value="${url||''}" onInput="loadGrades(this.value)"/>
+        </div>
+        <div class="grades"></div>
     `;
+
+    fetch("https://api.jaroslawlesniak.pl/schedule/grades.php")
+    .then(e => e.json())
+    .then(data => {
+        grades = data;
+        loadGrades();
+    });
+
+    
+}
+
+function loadGrades(pattern = "") {
+    document.querySelector(".grades").innerHTML = "";
+
+    for(let grade of grades) {
+        if(grade.name.toLowerCase().indexOf(pattern.toLowerCase()) !== -1) {
+            document.querySelector(".grades").innerHTML += `
+                <div class="grade" onClick="getActivitiesFromApi('${grade.name}', '${grade.href}')">
+                    ${grade.name}
+                </div>`;
+        }
+    }
+}
+
+function getActivitiesFromApi(name, url) {
+    console.log(name, url);
 }
 
 // if(Object.keys(schedule).length === 0 && schedule.constructor === Object) {
