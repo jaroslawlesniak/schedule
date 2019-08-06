@@ -135,7 +135,7 @@ function displaySchedule(d) {
          
         container.innerHTML += `
             <div id='header-${hourIndex}' class="option">
-                <span>${hour}</span>
+                <span><i class='icon-clock'></i>${hour}</span>
                 <div id='h${hourIndex}'></div>
             </div>
         `;
@@ -143,8 +143,8 @@ function displaySchedule(d) {
         for(let activity of schedule[day][hour]) {
             if((activity.even_week === "true" && week_type === 'even') || (activity.odd_week === "true" && week_type === 'odd')) {            
                 document.querySelector("#h" + hourIndex).innerHTML += `
-                        <span>${activity.activity}</span>
-                        <span>Sala: ${activity.classroom}</span>
+                        <span class="activity">${activity.activity}</span>
+                        <span class="info">${activity.classroom}</span>
                 `;
             }
         }

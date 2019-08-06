@@ -67,5 +67,17 @@ ul li.active, ul li:hover {
 
 .container .option > span {
   margin-bottom: 15px;
+  font-size: 15px;
+  color: #666;
+}
+
+.container .info {
+  font-size: 15px;
+  color: #666;
+}
+
+.container .activity {
+  font-size: 20px;
+  margin-bottom: 5px;
 }
 /*# sourceMappingURL=app.css.map */
