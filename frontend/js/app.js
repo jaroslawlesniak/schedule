@@ -2,8 +2,16 @@ if('serviceWorker' in navigator) {
     navigator.serviceWorker.register("./sw.js");
 }
 
+let url = localStorage.getItem('url');
+let data = {};
+let schedule = {};
+let current_day = 0;
+let week_type = "even";
+let currentPreparePage = 0;
+const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+
 if(localStorage.getItem('url') === null) {
-    let url = prompt("Wpisz adres URL planu zajęć");
+    url = prompt("Wpisz adres URL planu zajęć");
     localStorage.setItem('url', url);
 }
 
@@ -13,28 +21,28 @@ for(let link of links) {
     link.addEventListener('click', () => {
         document.querySelector('.navigation .active').removeAttribute('class');
         link.setAttribute('class', 'active');
+        current_day = parseInt(link.getAttribute('data-day'));
+        displaySchedule(current_day);
     })
 }
-
-let url = localStorage.getItem('url');
-let data = {};
-let schedule = {};
-let current_day = "monday";
-let week_type = "even";
-let currentPreparePage = 0;
 
 if(localStorage.getItem("data") !== null) {
     data = JSON.parse(localStorage.getItem("data"));
 }
 
+if(localStorage.getItem("schedule") !== null) {
+    schedule = JSON.parse(localStorage.getItem("schedule"));
+    displaySchedule(0);
+}
+
 fetch(`https://api.jaroslawlesniak.pl/schedule/parser.php?url=${url}`)
-.then(data => data.json())
-.then(data => {
-    if(JSON.stringify(data) !== localStorage.getItem("data")) {
-        localStorage.setItem("data", JSON.stringify(data));
-        prepareSchedule();
+.then(e => e.json())
+.then(e => {
+    if(JSON.stringify(e) !== localStorage.getItem("data")) {
+        localStorage.setItem("data", JSON.stringify(e));
+        schedule = {};
     }
-})
+});
 
 function prepareSchedule() {
     let container = document.querySelector(".container");
@@ -49,19 +57,18 @@ function prepareSchedule() {
 }
 
 function prepareDay(d) {
-    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
-
-    if(d > 0 && d <= 5) {
+    if(d >= 1 && d <= 5) {
         let checkboxex = document.querySelectorAll('input:checked');
         let day = days[d - 1];
 
-        schedule[day] = [];
+        schedule[day] = {};
+
         for(let chbox of checkboxex) {
             
             let hour = chbox.getAttribute('data-hour');
             if(schedule[day][hour]) {
                 schedule[day][hour].push({
-                    "acvtivity": chbox.getAttribute('data-name'),
+                    "activity": chbox.getAttribute('data-name'),
                     "classroom": chbox.getAttribute('data-classroom'),
                     "even_week": chbox.getAttribute('data-even_week'),
                     "odd_week": chbox.getAttribute('data-odd_week')
@@ -69,12 +76,17 @@ function prepareDay(d) {
             } else {
                 schedule[day][hour] = [];
                 schedule[day][hour].push({
-                    "acvtivity": chbox.getAttribute('data-name'),
+                    "activity": chbox.getAttribute('data-name'),
                     "classroom": chbox.getAttribute('data-classroom'),
                     "even_week": chbox.getAttribute('data-even_week'),
                     "odd_week": chbox.getAttribute('data-odd_week')
                 });
             }
+        }
+
+        if(d === 5) {
+            localStorage.setItem("schedule", JSON.stringify(schedule));
+            displaySchedule(0);
         }
     }
 
@@ -104,14 +116,58 @@ function prepareDay(d) {
             hourIndex++;
         }
     }
-    if(d === 5) {
-        console.log("Save data", schedule);
-        document.querySelector('.container').style.display = "none";
-    }
 }
 
 function displayNextPreparePage() {
     prepareDay(++currentPreparePage);
 }
 
-prepareSchedule();
+function displaySchedule(d) {
+    document.querySelector("header").style.display = "block";
+    let container = document.querySelector(".container");
+    let day = days[d];
+
+    container.innerHTML = "";
+
+    let hourIndex = 0;
+
+    for(let hour in schedule[day]) {
+         
+        container.innerHTML += `
+            <div id='header-${hourIndex}' class="option">
+                <span>${hour}</span>
+                <div id='h${hourIndex}'></div>
+            </div>
+        `;
+
+        for(let activity of schedule[day][hour]) {
+            if((activity.even_week === "true" && week_type === 'even') || (activity.odd_week === "true" && week_type === 'odd')) {            
+                document.querySelector("#h" + hourIndex).innerHTML += `
+                        <span>${activity.activity}</span>
+                        <span>Sala: ${activity.classroom}</span>
+                `;
+            }
+        }
+
+        if(document.querySelector("#h" + hourIndex).innerHTML === "") {
+            document.querySelector("#header-" + hourIndex).outerHTML = "";
+        }
+
+        hourIndex++;
+    }
+}
+
+function changeWeek(e) {
+    if(week_type === "even") {
+        week_type = "odd";
+        e.innerHTML = "Nieparzysty";
+    } else {
+        week_type = "even";
+        e.innerHTML = "Parzysty";
+    }
+    displaySchedule(current_day);
+}
+
+if(Object.keys(schedule).length === 0 && schedule.constructor === Object) {
+    prepareSchedule();
+}

@@ -12,15 +12,16 @@
 <body>
     <header>
         <nav>
-            <h1>Plan zajęć #class</h1>
+            <h1>Plan zajęć</h1>
             <ul class="navigation">
-                <li class="active" data-day="monday">Poniedziałek</li>
-                <li data-day="tuesday">Wtorek</li>
-                <li data-day="wednesday">Środa</li>
-                <li data-day="thursday">Czwartek</li>
-                <li data-day="friday">Piątek</li>
+                <li class="active" data-day="0">Poniedziałek</li>
+                <li data-day="1">Wtorek</li>
+                <li data-day="2">Środa</li>
+                <li data-day="3">Czwartek</li>
+                <li data-day="4">Piątek</li>
             </ul>
         </nav>
+        <button onclick="changeWeek(this)">Parzysty</button>
     </header>
     <main>
         <div class="container"></div>
