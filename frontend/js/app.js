@@ -228,6 +228,7 @@ function displaySchedule(d) {
     
     let date = new Date();
     let date_timestamp = date.getHours()*60 + date.getMinutes();
+    let day_of_week = date.getDay() - 1;
 
     for(let activity of activities) {
         let startHour = activity.getAttribute("data-start").split(":");
@@ -236,7 +237,7 @@ function displaySchedule(d) {
         let start_timestamp = parseInt(startHour[0])*60 + parseInt(startHour[1]);
         let end_timestamp = parseInt(endHour[0])*60 + parseInt(endHour[1]);
 
-        if(date_timestamp >= start_timestamp && date_timestamp < end_timestamp) {
+        if(date_timestamp >= start_timestamp && date_timestamp < end_timestamp && current_day === day_of_week) {
             let difference = (end_timestamp - date_timestamp);
             activity.querySelector(".time").innerHTML = "Pozostało: " + difference + "min";
         }
