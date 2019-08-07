@@ -6,19 +6,23 @@ let url = localStorage.getItem('url');
 let data = JSON.parse(localStorage.getItem("schedule")) || {};
 let schedule = JSON.parse(localStorage.getItem("schedule")) || {};
 let grade_name = localStorage.getItem("name") || "";
-let current_day = 0;
+let current_day = parseInt(localStorage.getItem("day")) || 0;
 let week_type = "even";
 let currentPreparePage = 0;
 const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
 
 let links = document.querySelectorAll('.navigation li');
 
-for(let link of links) {
-    link.addEventListener('click', () => {
-        document.querySelector('.navigation .active').removeAttribute('class');
-        link.setAttribute('class', 'active');
-        current_day = parseInt(link.getAttribute('data-day'));
-        displaySchedule(current_day);
+function selectMenuOption(link) {
+    document.querySelector('.navigation .active').removeAttribute('class');
+    links[link].setAttribute('class', 'active');
+    current_day = parseInt(links[link].getAttribute('data-day'));
+    displaySchedule(current_day);
+}
+
+for(let i = 0; i <= links.length - 1; i++) {
+    links[i].addEventListener('click', () => {
+        selectMenuOption(i);
     })
 }
 
@@ -26,7 +30,7 @@ if(url === null || (Object.keys(schedule).length === 0 && schedule.constructor =
     configureApp();
 } else {
     document.querySelector("#name").innerHTML = grade_name;
-    displaySchedule(0);
+    selectMenuOption(current_day);
 }
 
 let grades = [];
@@ -45,7 +49,7 @@ function configureApp() {
             <h1>Grupa</h1>
             <label>
                 <i class="icon-search"></i>
-                <input type="text" name="url" placeholder="Wyszukaj nazwę oddziału" onInput="loadGrades(this.value)" autocomplete="off"/>
+                <input type="text" name="url" placeholder="Wyszukaj nazwę grupy" onInput="loadGrades(this.value)" autocomplete="off"/>
             </label>
         </div>
         <div class="grades"></div>
@@ -108,22 +112,26 @@ function prepareDay(d) {
         schedule[day] = {};
 
         for(let chbox of checkboxex) {
-            
+            let activity = chbox.getAttribute('data-name');
+            let classroom = chbox.getAttribute('data-classroom');
+            let even_week = chbox.getAttribute('data-even_week');
+            let odd_week = chbox.getAttribute('data-odd_week');
             let hour = chbox.getAttribute('data-hour');
+
             if(schedule[day][hour]) {
                 schedule[day][hour].push({
-                    "activity": chbox.getAttribute('data-name'),
-                    "classroom": chbox.getAttribute('data-classroom'),
-                    "even_week": chbox.getAttribute('data-even_week'),
-                    "odd_week": chbox.getAttribute('data-odd_week')
+                    "activity": activity,
+                    "classroom": classroom,
+                    "even_week": even_week,
+                    "odd_week": odd_week
                 });
             } else {
                 schedule[day][hour] = [];
                 schedule[day][hour].push({
-                    "activity": chbox.getAttribute('data-name'),
-                    "classroom": chbox.getAttribute('data-classroom'),
-                    "even_week": chbox.getAttribute('data-even_week'),
-                    "odd_week": chbox.getAttribute('data-odd_week')
+                    "activity": activity,
+                    "classroom": classroom,
+                    "even_week": even_week,
+                    "odd_week": odd_week
                 });
             }
         }
@@ -181,7 +189,7 @@ function displayNextPreparePage() {
 }
 
 function displaySchedule(d) {
-    document.documentElement.scrollTop = 0;
+    localStorage.setItem("day", d);
     document.querySelector("meta[name=theme-color").setAttribute("content", "#0c3d75");
     document.querySelector("header").style.display = "block";
     let container = document.querySelector(".container");
@@ -192,9 +200,9 @@ function displaySchedule(d) {
     let hourIndex = 0;
 
     for(let hour in schedule[day]) {
-         
+        let activity_hours = hour.split("-");
         container.innerHTML += `
-            <div id='header-${hourIndex}' class="option">
+            <div id='header-${hourIndex}' class="option" data-start="${activity_hours[0]}" data-end="${activity_hours[1]}">
                 <span><i class='icon-clock'></i>${hour}</span>
                 <div id='h${hourIndex}'></div>
             </div>
@@ -204,7 +212,7 @@ function displaySchedule(d) {
             if((activity.even_week === "true" && week_type === 'even') || (activity.odd_week === "true" && week_type === 'odd')) {            
                 document.querySelector("#h" + hourIndex).innerHTML += `
                         <span class="activity">${activity.activity}</span>
-                        <span class="info">${activity.classroom}</span>
+                        <span class="info">Sala: ${activity.classroom}<p class="time"></p></span>
                 `;
             }
         }
@@ -214,6 +222,24 @@ function displaySchedule(d) {
         }
 
         hourIndex++;
+    }
+
+    let activities = document.querySelectorAll("div.option");
+    
+    let date = new Date();
+    let date_timestamp = date.getHours()*60 + date.getMinutes();
+
+    for(let activity of activities) {
+        let startHour = activity.getAttribute("data-start").split(":");
+        let endHour = activity.getAttribute("data-end").split(":");
+
+        let start_timestamp = parseInt(startHour[0])*60 + parseInt(startHour[1]);
+        let end_timestamp = parseInt(endHour[0])*60 + parseInt(endHour[1]);
+
+        if(date_timestamp >= start_timestamp && date_timestamp < end_timestamp) {
+            let difference = (end_timestamp - date_timestamp);
+            activity.querySelector(".time").innerHTML = "Pozostało: " + difference + "min";
+        }
     }
 }
 

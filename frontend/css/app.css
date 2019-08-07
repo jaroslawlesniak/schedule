@@ -102,12 +102,20 @@ ul li.active, ul li:hover {
   margin-bottom: 5px;
 }
 
+.container .time {
+  margin: 0px;
+  float: right;
+  color: #2c62a0;
+}
+
 .configure {
   margin-top: -15px;
 }
 
 .configure .header {
-  background-color: #f8f8f8;
+  -webkit-box-shadow: 0px 0px 5px #888;
+          box-shadow: 0px 0px 5px #888;
+  background-color: #fff;
 }
 
 .configure h1 {

@@ -108,14 +108,20 @@ ul {
         font-size: 20px;
         margin-bottom: 5px;
     }
+
+    .time {
+        margin: 0px;
+        float: right;
+        color: #2c62a0;
+    }
 }
 
 .configure {
     margin-top: -15px;
     
     .header {
-        // box-shadow: 0px 0px 5px #888;
-        background-color: #f8f8f8;
+        box-shadow: 0px 0px 5px #888;
+        background-color: #fff;
     }
 
     h1 {
