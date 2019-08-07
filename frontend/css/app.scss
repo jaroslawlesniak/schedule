@@ -84,7 +84,7 @@ ul {
     .option {
         border: 1px solid #ddd;
         margin-top: 15px;
-        padding: 10px;
+        padding: 15px 10px;
         border-radius: 10px;
         display: block;
 
@@ -114,13 +114,13 @@ ul {
     margin-top: -15px;
     
     .header {
-        box-shadow: 0px 0px 5px #888;
+        // box-shadow: 0px 0px 5px #888;
+        background-color: #f8f8f8;
     }
 
     h1 {
         margin: 0px;
         padding: 15px 10px;
-        background-color: #fff;
         font-weight: bold;
         font-size: 16px;
         color: #333;
@@ -130,34 +130,102 @@ ul {
         display: block;
     }
 
-    input[type="text"] {
-        background-color: #eee;
-        border-radius: 10px;
-        color: $theme-color;
-        padding: 10px;
+    input[type="text"], .additional_info {
+        color: #333;
+        padding: 10px 0px;
         outline: none;
-        display: block;
+        display: inline-block;
         border: none;
         font-size: 16px;
-        background-color: #fff;
-        width: calc(100% - 20px);
+        width: calc(100% - 45px);
+        background-color: inherit;
+    }
+
+    .additional_info {
+        padding: 10px;
+    }
+
+    .icon-search {
+        width: 30px;
+        display: inline-block;
+        text-align: right;
+        color: #333;
+    }
+
+    .additional_info {
+        color: #666;
     }
 
     .grades {
         .grade {
-            margin: 15px;
-            padding: 20px 15px;
-            border-radius: 10px;
-            border: 1px solid #ddd;
+            display: block;
+            padding: 15px;
+            border-left: 5px solid $theme-color;
+            margin: 10px;
+            margin-top: 5px;
+            background-color: #f8f8f8;
+            width: calc(100% - 55px);
 
             &:hover {
                 background-color: $theme-color;
                 color: #fff;
             }
+
+            &:first-child {
+                margin-top: 10px;
+            }
+        }
+    }
+
+    .activities_list {
+        padding: 25px 15px;
+
+        > span {
+            margin-top: 25px;
+            color: #666;
+
+            &:first-child {
+                margin-top: 0px;
+            }
         }
     }
 
     .option {
-        padding: 10px;
+        display: block;
+        padding: 15px 10px;
+        margin-top: 5px;
+        border-left: 5px solid $theme-color;
+        margin-left: 5px;
+        background-color: #f8f8f8;
+        width: calc(100% - 45px);
+    }
+
+    .nextPage {
+        background-color: $theme-color;
+        color: #fff;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 25px;
+        display: block;
+        border: none;
+        outline: none;
+        padding: 15px 25px;
     }
 }
+
+.loader {
+    border: 3px solid #fff;
+    border-top: 3px solid $theme-color;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 0.8s linear infinite;
+    margin-left: auto;
+    margin-right: auto; 
+    margin-top: 100px;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }

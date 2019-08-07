@@ -37,10 +37,16 @@ function configureApp() {
     let container = document.querySelector(".configure");
     document.querySelector("meta[name=theme-color").setAttribute("content", "#ffffff");
 
+    container.style.display = "block";
+    currentPreparePage = 0;
+
     container.innerHTML = `
          <div class="header">
             <h1>Grupa</h1>
-            <input type="text" name="url" placeholder="Wyszukaj nazwę oddziału" onInput="loadGrades(this.value)"/>
+            <label>
+                <i class="icon-search"></i>
+                <input type="text" name="url" placeholder="Wyszukaj nazwę oddziału" onInput="loadGrades(this.value)" autocomplete="off"/>
+            </label>
         </div>
         <div class="grades"></div>
     `;
@@ -61,23 +67,23 @@ function loadGrades(pattern = "") {
     for(let grade of grades) {
         if(grade.name.toLowerCase().indexOf(pattern.toLowerCase()) !== -1) {
             document.querySelector(".grades").innerHTML += `
-                <div class="grade" onClick="getActivitiesFromApi('${grade.name}', '${grade.href}')">
-                    ${grade.name}
-                </div>`;
+                <div class="grade" onClick="getActivitiesFromApi('${grade.name}', '${grade.href}')">${grade.name}</div>`;
         }
     }
 }
 
 function getActivitiesFromApi(_name, _url) {
-    document.querySelector(".configure").innerHTML = "Wczytywanie ...";
+    document.querySelector(".configure").innerHTML = "<div class='loader'></div>";
     fetch("https://api.jaroslawlesniak.pl/schedule/parser.php?url=" + _url)
     .then(e => e.json())
     .then(e => {
-        document.querySelector(".configure").innerHTML = "";
-        data = e;
-        url = _url;
-        grade_name = _name;
-        prepareSchedule();
+        setTimeout(() => {
+            document.querySelector(".configure").innerHTML = "";
+            data = e;
+            url = _url;
+            grade_name = _name;
+            prepareSchedule();
+        }, 300);
     })
 }
 
@@ -85,15 +91,16 @@ function prepareSchedule() {
     let container = document.querySelector(".configure");
     container.innerHTML += `
     <div class='header'>
-        Konfiguracja
-        <p>Zaznacz swoje zajęcia</p>
+        <h1 id="currentDay">Zajęcia</h1>
+        <div class="additional_info">Zaznacz wszystkie swoje zajęcia</div>
     </div>
     <div class='activities_list'></div>
-    <button onclick="displayNextPreparePage()">Następna strona</button>`;
+    <button class="nextPage" onclick="displayNextPreparePage()">Następny dzień</button>`;
     prepareDay(0);
 }
 
 function prepareDay(d) {
+    document.documentElement.scrollTop = 0;
     if(d >= 1 && d <= 5) {
         let checkboxex = document.querySelectorAll('input:checked');
         let day = days[d - 1];
@@ -121,6 +128,10 @@ function prepareDay(d) {
             }
         }
 
+        if(d === 4) {
+            document.querySelector(".nextPage").innerHTML = "Zakończ konfigurację";
+        }
+        
         if(d === 5) {
             document.querySelector("#name").innerHTML = grade_name;
             localStorage.setItem("schedule", JSON.stringify(schedule));
@@ -135,7 +146,10 @@ function prepareDay(d) {
     }
 
     if(d < 5) {
+        const visible_days = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"];
+
         let container = document.querySelector(".activities_list");
+        document.querySelector("#currentDay").innerHTML = visible_days[d];
         let hourIndex = 0;
         let day = days[d];
 
@@ -143,7 +157,7 @@ function prepareDay(d) {
         
         for(let hour in data[day]) {
             container.innerHTML += `
-                <span>${hour}</span>
+                <span><i class="icon-clock"></i>${hour}</span>
                 <div id='h${hourIndex}'></div>
             `;
             
@@ -167,6 +181,8 @@ function displayNextPreparePage() {
 }
 
 function displaySchedule(d) {
+    document.documentElement.scrollTop = 0;
+    document.querySelector("meta[name=theme-color").setAttribute("content", "#0c3d75");
     document.querySelector("header").style.display = "block";
     let container = document.querySelector(".container");
     let day = days[d];
