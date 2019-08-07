@@ -203,7 +203,7 @@ function displaySchedule(d) {
         let activity_hours = hour.split("-");
         container.innerHTML += `
             <div id='header-${hourIndex}' class="option" data-start="${activity_hours[0]}" data-end="${activity_hours[1]}">
-                <span><i class='icon-clock'></i>${hour}</span>
+                <span><i class='icon-clock'></i></span>
                 <div id='h${hourIndex}'></div>
             </div>
         `;
@@ -225,6 +225,21 @@ function displaySchedule(d) {
     }
 
     let activities = document.querySelectorAll("div.option");
+
+    let prevActivity = activities[0] || null;
+
+    for(let currentActivity of activities) {
+        if(prevActivity !== null && prevActivity !== currentActivity) {
+            if(prevActivity.querySelector("div").innerHTML === currentActivity.querySelector("div").innerHTML) {
+                prevActivity.setAttribute("data-end", currentActivity.getAttribute("data-end"));
+                currentActivity.outerHTML = "";
+                continue;
+            }
+        }
+        prevActivity = currentActivity;
+    }
+
+    activities = document.querySelectorAll("div.option");
     
     let date = new Date();
     let date_timestamp = date.getHours()*60 + date.getMinutes();
@@ -234,12 +249,20 @@ function displaySchedule(d) {
         let startHour = activity.getAttribute("data-start").split(":");
         let endHour = activity.getAttribute("data-end").split(":");
 
+        activity.querySelector("span").innerHTML += startHour[0] + ":" + startHour[1] + "-" + endHour[0] + ":" + endHour[1];
+
         let start_timestamp = parseInt(startHour[0])*60 + parseInt(startHour[1]);
         let end_timestamp = parseInt(endHour[0])*60 + parseInt(endHour[1]);
 
         if(date_timestamp >= start_timestamp && date_timestamp < end_timestamp && current_day === day_of_week) {
             let difference = (end_timestamp - date_timestamp);
-            activity.querySelector(".time").innerHTML = "Pozostało: " + difference + "min";
+            let time_info = "Pozostało";
+
+            if(difference === 1) {
+                time_info = "Pozostała";
+            }
+
+            activity.querySelector(".time").innerHTML = time_info + " <b>" + difference + "</b> min";
         }
     }
 }
