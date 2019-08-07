@@ -4,7 +4,7 @@
     header("Access-Control-Allow-Origin: *");
     libxml_use_internal_errors (true);
 
-    $scheduleURL = $_GET["url"];
+    $scheduleURL = "http://aslan.mech.pk.edu.pl/~podzial/stacjonarne/html/".$_GET["url"];
 
     $dom = new DOMDocument();
     $dom->loadHTMLFile($scheduleURL);

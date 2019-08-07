@@ -79,6 +79,7 @@ ul li.active, ul li:hover {
   margin-top: 15px;
   padding: 10px;
   border-radius: 10px;
+  display: block;
 }
 
 .container .option:first-child {
@@ -141,5 +142,14 @@ ul li.active, ul li:hover {
   padding: 20px 15px;
   border-radius: 10px;
   border: 1px solid #ddd;
+}
+
+.configure .grades .grade:hover {
+  background-color: #0c3d75;
+  color: #fff;
+}
+
+.configure .option {
+  padding: 10px;
 }
 /*# sourceMappingURL=app.css.map */

@@ -86,6 +86,7 @@ ul {
         margin-top: 15px;
         padding: 10px;
         border-radius: 10px;
+        display: block;
 
         &:first-child {
             margin-top: 0px;
@@ -148,6 +149,15 @@ ul {
             padding: 20px 15px;
             border-radius: 10px;
             border: 1px solid #ddd;
+
+            &:hover {
+                background-color: $theme-color;
+                color: #fff;
+            }
         }
+    }
+
+    .option {
+        padding: 10px;
     }
 }

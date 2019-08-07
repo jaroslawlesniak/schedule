@@ -3,8 +3,9 @@ if('serviceWorker' in navigator) {
 }
 
 let url = localStorage.getItem('url');
-let data = {};
-let schedule = {};
+let data = JSON.parse(localStorage.getItem("schedule")) || {};
+let schedule = JSON.parse(localStorage.getItem("schedule")) || {};
+let grade_name = localStorage.getItem("name") || "";
 let current_day = 0;
 let week_type = "even";
 let currentPreparePage = 0;
@@ -21,33 +22,70 @@ for(let link of links) {
     })
 }
 
-if(url === null) {
+if(url === null || (Object.keys(schedule).length === 0 && schedule.constructor === Object)) {
     configureApp();
+} else {
+    document.querySelector("#name").innerHTML = grade_name;
+    displaySchedule(0);
 }
 
-// if(localStorage.getItem("data") !== null) {
-//     data = JSON.parse(localStorage.getItem("data"));
-// }
+let grades = [];
 
-// if(localStorage.getItem("schedule") !== null) {
-//     schedule = JSON.parse(localStorage.getItem("schedule"));
-//     displaySchedule(0);
-// }
+function configureApp() {
+    document.querySelector("header").style.display = "none";
+    document.querySelector(".container").innerHTML = "";
+    let container = document.querySelector(".configure");
+    document.querySelector("meta[name=theme-color").setAttribute("content", "#ffffff");
 
-// fetch(`https://api.jaroslawlesniak.pl/schedule/parser.php?url=${url}`)
-// .then(e => e.json())
-// .then(e => {
-//     if(JSON.stringify(e) !== localStorage.getItem("data")) {
-//         localStorage.setItem("data", JSON.stringify(e));
-//         schedule = {};
-//     }
-// });
+    container.innerHTML = `
+         <div class="header">
+            <h1>Grupa</h1>
+            <input type="text" name="url" placeholder="Wyszukaj nazwę oddziału" onInput="loadGrades(this.value)"/>
+        </div>
+        <div class="grades"></div>
+    `;
+
+    fetch("https://api.jaroslawlesniak.pl/schedule/grades.php")
+    .then(e => e.json())
+    .then(data => {
+        grades = data;
+        loadGrades();
+    });
+
+    
+}
+
+function loadGrades(pattern = "") {
+    document.querySelector(".grades").innerHTML = "";
+
+    for(let grade of grades) {
+        if(grade.name.toLowerCase().indexOf(pattern.toLowerCase()) !== -1) {
+            document.querySelector(".grades").innerHTML += `
+                <div class="grade" onClick="getActivitiesFromApi('${grade.name}', '${grade.href}')">
+                    ${grade.name}
+                </div>`;
+        }
+    }
+}
+
+function getActivitiesFromApi(_name, _url) {
+    document.querySelector(".configure").innerHTML = "Wczytywanie ...";
+    fetch("https://api.jaroslawlesniak.pl/schedule/parser.php?url=" + _url)
+    .then(e => e.json())
+    .then(e => {
+        document.querySelector(".configure").innerHTML = "";
+        data = e;
+        url = _url;
+        grade_name = _name;
+        prepareSchedule();
+    })
+}
 
 function prepareSchedule() {
-    let container = document.querySelector(".container");
+    let container = document.querySelector(".configure");
     container.innerHTML += `
     <div class='header'>
-        Konfiguracja <span class='day'></span>
+        Konfiguracja
         <p>Zaznacz swoje zajęcia</p>
     </div>
     <div class='activities_list'></div>
@@ -84,6 +122,13 @@ function prepareDay(d) {
         }
 
         if(d === 5) {
+            document.querySelector("#name").innerHTML = grade_name;
+            localStorage.setItem("schedule", JSON.stringify(schedule));
+            document.querySelector(".configure").style.display = "none";
+            document.querySelector(".configure").style.innerHTML = "";
+            localStorage.setItem("url", url);
+            localStorage.setItem("name", grade_name);
+            localStorage.setItem("data", JSON.stringify(data));
             localStorage.setItem("schedule", JSON.stringify(schedule));
             displaySchedule(0);
         }
@@ -106,9 +151,9 @@ function prepareDay(d) {
                 let activity = data[day][hour][index];
                 
                 document.querySelector("#h" + hourIndex).innerHTML += `
-                    <div class="option">
-                        <label><input type="checkbox" data-hour='${hour}' data-name='${activity.activity}' data-classroom='${activity.classroom}' data-even_week='${activity.even_week}' data-odd_week='${activity.odd_week}'/>${activity.activity_name}</label>
-                    </div>
+                    <label class="option">
+                        <input type="checkbox" data-hour='${hour}' data-name='${activity.activity}' data-classroom='${activity.classroom}' data-even_week='${activity.even_week}' data-odd_week='${activity.odd_week}'/>${activity.activity_name}
+                    </label>
                 `;
             }
 
@@ -166,48 +211,3 @@ function changeWeek(e) {
     }
     displaySchedule(current_day);
 }
-
-let grades = [];
-
-function configureApp() {
-    let container = document.querySelector(".configure");
-    document.querySelector("meta[name=theme-color").setAttribute("content", "#ffffff");
-
-    container.innerHTML = `
-         <div class="header">
-            <h1>Grupa</h1>
-            <input type="text" name="url" placeholder="Wyszukaj nazwę oddziału" value="${url||''}" onInput="loadGrades(this.value)"/>
-        </div>
-        <div class="grades"></div>
-    `;
-
-    fetch("https://api.jaroslawlesniak.pl/schedule/grades.php")
-    .then(e => e.json())
-    .then(data => {
-        grades = data;
-        loadGrades();
-    });
-
-    
-}
-
-function loadGrades(pattern = "") {
-    document.querySelector(".grades").innerHTML = "";
-
-    for(let grade of grades) {
-        if(grade.name.toLowerCase().indexOf(pattern.toLowerCase()) !== -1) {
-            document.querySelector(".grades").innerHTML += `
-                <div class="grade" onClick="getActivitiesFromApi('${grade.name}', '${grade.href}')">
-                    ${grade.name}
-                </div>`;
-        }
-    }
-}
-
-function getActivitiesFromApi(name, url) {
-    console.log(name, url);
-}
-
-// if(Object.keys(schedule).length === 0 && schedule.constructor === Object) {
-//     prepareSchedule();
-// }
