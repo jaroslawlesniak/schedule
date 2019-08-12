@@ -272,7 +272,7 @@ function displaySchedule(d) {
                 hours_info = "";
             }
 
-            if(difference === 0) {
+            if(difference%60 === 0) {
                 minutes_info = "";
             }
 
@@ -291,7 +291,7 @@ function displaySchedule(d) {
                 hours_info = "";
             }
 
-            if(difference === 0) {
+            if(difference%60 === 0) {
                 minutes_info = "";
             }
 
