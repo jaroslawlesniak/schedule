@@ -55,7 +55,8 @@ function settingsPage() {
             <h1>Ustawienia</h1>
         </div>
         <div class="settings">
-            <button id="update-btn" onClick="ckeckUpdates()">Sprawdź aktualizację</button>
+            <button id="update-btn" onClick="ckeckUpdates()">Sprawdź aktualizację planu</button>
+            <button onClick="reconfigureApp()">Konfiguruj zajęcia</button>
             <button onClick="configureApp()">Zmień grupę</button>
         </div>
     `;
@@ -102,11 +103,22 @@ function configureApp() {
         <div class="grades"></div>
     `;
 
+    document.querySelector(".grades").innerHTML = "<div class='loader'></div>";
     fetch("https://api.jaroslawlesniak.pl/schedule/grades.php")
     .then(e => e.json())
     .then(data => {
         grades = data;
         loadGrades();
+    });
+}
+
+function reconfigureApp() {
+    document.querySelector(".configure").innerHTML = "<div class='loader'></div>";
+    fetch("https://api.jaroslawlesniak.pl/schedule/parser.php?url=" + url)
+    .then(e => e.json())
+    .then(e => {
+        data = e;
+        prepareSchedule();
     });
 }
 
@@ -138,6 +150,8 @@ function getActivitiesFromApi(_name, _url) {
 
 function prepareSchedule() {
     let container = document.querySelector(".configure");
+    container.innerHTML = "";
+
     container.innerHTML += `
     <div class='header'>
         <h1 id="currentDay">Zajęcia</h1>
@@ -214,9 +228,7 @@ function prepareDay(d) {
                 <div id='h${hourIndex}'></div>
             `;
             
-            for(let index in data[day][hour]) {
-                let activity = data[day][hour][index];
-                
+            for(let activity of data[day][hour]) {
                 document.querySelector("#h" + hourIndex).innerHTML += `
                     <label class="option">
                         <input type="checkbox" data-hour='${hour}' data-name='${activity.activity}' data-classroom='${activity.classroom}' data-even_week='${activity.even_week}' data-odd_week='${activity.odd_week}'/>${activity.activity_name}

@@ -233,7 +233,7 @@ ul {
     animation: spin 0.8s linear infinite;
     margin-left: auto;
     margin-right: auto; 
-    margin-top: 100px;
+    margin-top: 50px;
   }
   
   @keyframes spin {
@@ -248,15 +248,19 @@ ul {
           display: block;
           width: 100%;
           padding: 15px;
-          margin-top: 30px;
-          color: #fff;
-          background-color: $theme-color;
+          margin-top: 15px;
+          color: #333;
+          background-color: #f2f2f2;
           border: none;
           outline: none;
           cursor: pointer;
 
           &:first-child {
-              margin-top: 10px;
+              margin-top: 5px;
+          }
+
+          &:hover {
+              background-color: #eee;
           }
       }
   }
