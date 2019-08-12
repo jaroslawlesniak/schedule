@@ -41,6 +41,47 @@ if(url === null || (Object.keys(schedule).length === 0 && schedule.constructor =
 
 let grades = [];
 
+function settingsPage() {
+    document.querySelector("header").style.display = "none";
+    document.querySelector(".container").innerHTML = "";
+    let container = document.querySelector(".configure");
+    document.querySelector("meta[name=theme-color").setAttribute("content", "#ffffff");
+
+    container.style.display = "block";
+    currentPreparePage = 0;
+
+    container.innerHTML = `
+         <div class="header">
+            <h1>Ustawienia</h1>
+        </div>
+        <div class="settings">
+            <button id="update-btn" onClick="ckeckUpdates()">Sprawdź aktualizację</button>
+            <button onClick="configureApp()">Zmień grupę</button>
+        </div>
+    `;
+}
+
+function ckeckUpdates() {
+    document.querySelector("#update-btn").innerHTML = "Sprawdzanie ...";
+
+    fetch("https://api.jaroslawlesniak.pl/schedule/parser.php?url=" + url)
+    .then(e => e.json())
+    .then(e => {
+        document.querySelector("#update-btn").innerHTML = "Sprawdź aktualizację";
+        let prevData = localStorage.getItem("data");
+        if(prevData !== JSON.stringify(e)) {
+            if(confirm("Dostępna jest nowa wersja planu zajęć. Czy chcesz teraz ją skonfigurować?")) {
+                document.querySelector(".configure").innerHTML = "";
+                localStorage.setItem("data", JSON.stringify(e));
+                data = e;
+                prepareSchedule();
+            }
+        } else {
+            alert("Brak dostępnych aktualizacji");
+        }
+    })
+}
+
 function configureApp() {
     document.querySelector("header").style.display = "none";
     document.querySelector(".container").innerHTML = "";
@@ -67,8 +108,6 @@ function configureApp() {
         grades = data;
         loadGrades();
     });
-
-    
 }
 
 function loadGrades(pattern = "") {
@@ -94,7 +133,7 @@ function getActivitiesFromApi(_name, _url) {
             grade_name = _name;
             prepareSchedule();
         }, 300);
-    })
+    });
 }
 
 function prepareSchedule() {

@@ -208,9 +208,7 @@ ul li.active, ul li:hover {
 .configure .nextPage {
   background-color: #0c3d75;
   color: #fff;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 25px;
+  width: 100%;
   display: block;
   border: none;
   outline: none;
@@ -250,5 +248,25 @@ ul li.active, ul li:hover {
     -webkit-transform: rotate(360deg);
             transform: rotate(360deg);
   }
+}
+
+.settings {
+  padding: 20px;
+}
+
+.settings button {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  margin-top: 30px;
+  color: #fff;
+  background-color: #0c3d75;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.settings button:first-child {
+  margin-top: 10px;
 }
 /*# sourceMappingURL=app.css.map */

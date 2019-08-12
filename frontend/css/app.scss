@@ -216,9 +216,7 @@ ul {
     .nextPage {
         background-color: $theme-color;
         color: #fff;
-        margin-left: auto;
-        margin-right: auto;
-        margin-bottom: 25px;
+        width: 100%;
         display: block;
         border: none;
         outline: none;
@@ -241,4 +239,24 @@ ul {
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+  }
+
+  .settings {
+    padding: 20px;
+
+      button {
+          display: block;
+          width: 100%;
+          padding: 15px;
+          margin-top: 30px;
+          color: #fff;
+          background-color: $theme-color;
+          border: none;
+          outline: none;
+          cursor: pointer;
+
+          &:first-child {
+              margin-top: 10px;
+          }
+      }
   }
