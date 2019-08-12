@@ -49,7 +49,21 @@
                     }
 
                     if($child->nodeName === "a") {
-                        $inCellLessons[$index - 1]['classroom'] = trim(substr($child->nodeValue, 0, strpos($child->nodeValue, '-')));
+                        $classRoom = trim($child->nodeValue);
+
+                        if(strpos($classRoom, "-") !== false) {
+                            $classRoom = substr($child->nodeValue, 0, strpos($child->nodeValue, '-'));
+                        }
+                        $cellIndex = $index - 1;
+
+                        if(strpos($classRoom, "Hala") !== false || strpos($classRoom, "Aerobik")) {
+                            $cellIndex = $index - 2;
+                        }
+                        if($cellIndex < 0) {
+                            $cellIndex = 0;
+                        }
+
+                        $inCellLessons[$cellIndex]['classroom'] = $classRoom;
                     }
                 }
 
