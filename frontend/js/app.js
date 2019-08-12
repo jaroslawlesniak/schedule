@@ -63,24 +63,26 @@ function settingsPage() {
 }
 
 function ckeckUpdates() {
-    document.querySelector("#update-btn").innerHTML = "Sprawdzanie ...";
+    document.querySelector("#update-btn").innerHTML = "<div class='loader small-inline'></div>Sprawdzanie";
 
     fetch("https://api.jaroslawlesniak.pl/schedule/parser.php?url=" + url)
     .then(e => e.json())
     .then(e => {
-        document.querySelector("#update-btn").innerHTML = "Sprawdź aktualizację";
-        let prevData = localStorage.getItem("data");
-        if(prevData !== JSON.stringify(e)) {
-            if(confirm("Dostępna jest nowa wersja planu zajęć. Czy chcesz teraz ją skonfigurować?")) {
-                document.querySelector(".configure").innerHTML = "";
-                localStorage.setItem("data", JSON.stringify(e));
-                data = e;
-                prepareSchedule();
+        setTimeout(() => {
+            document.querySelector("#update-btn").innerHTML = "Sprawdź aktualizację planu";
+            let prevData = localStorage.getItem("data");
+            if(prevData !== JSON.stringify(e)) {
+                if(confirm("Dostępna jest nowa wersja planu zajęć. Czy chcesz teraz ją skonfigurować?")) {
+                    document.querySelector(".configure").innerHTML = "";
+                    localStorage.setItem("data", JSON.stringify(e));
+                    data = e;
+                    prepareSchedule();
+                }
+            } else {
+                alert("Brak dostępnych aktualizacji");
             }
-        } else {
-            alert("Brak dostępnych aktualizacji");
-        }
-    })
+        }, 300)
+    });
 }
 
 function configureApp() {
@@ -208,7 +210,7 @@ function prepareDay(d) {
             localStorage.setItem("name", grade_name);
             localStorage.setItem("data", JSON.stringify(data));
             localStorage.setItem("schedule", JSON.stringify(schedule));
-            displaySchedule(0);
+            selectMenuOption(0);
         }
     }
 

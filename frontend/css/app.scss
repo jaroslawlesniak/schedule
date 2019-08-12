@@ -127,6 +127,9 @@ ul {
     .header {
         box-shadow: 0px 0px 5px #888;
         background-color: #fff;
+        position: relative;
+        z-index: 999;
+        padding: 15px;
     }
 
     h1 {
@@ -170,22 +173,10 @@ ul {
     .grades {
         .grade {
             display: block;
-            padding: 15px;
-            border-left: 5px solid $theme-color;
-            margin: 10px;
-            margin-top: 5px;
-            background-color: #f8f8f8;
-            width: calc(100% - 55px);
+            background-color: #fff;
             cursor: pointer;
-
-            &:hover {
-                background-color: $theme-color;
-                color: #fff;
-            }
-
-            &:first-child {
-                margin-top: 10px;
-            }
+            padding: 25px;
+            border-bottom: 1px solid #ddd;
         }
     }
 
@@ -220,7 +211,7 @@ ul {
         display: block;
         border: none;
         outline: none;
-        padding: 15px 25px;
+        padding: 20px;
     }
 }
 
@@ -234,6 +225,16 @@ ul {
     margin-left: auto;
     margin-right: auto; 
     margin-top: 50px;
+
+    &.small-inline {
+        width: 20px;
+        height: 20px;
+        margin: 0;
+        border-width: 2px;
+        float: left;
+        margin-right: 15px;
+        margin-top: -7px;
+    }
   }
   
   @keyframes spin {
@@ -242,25 +243,17 @@ ul {
   }
 
   .settings {
-    padding: 20px;
-
-      button {
-          display: block;
-          width: 100%;
-          padding: 15px;
-          margin-top: 15px;
-          color: #333;
-          background-color: #f2f2f2;
-          border: none;
-          outline: none;
-          cursor: pointer;
-
-          &:first-child {
-              margin-top: 5px;
-          }
-
-          &:hover {
-              background-color: #eee;
-          }
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            color: #333;
+            background-color: #fff;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            padding: 25px;
       }
   }
