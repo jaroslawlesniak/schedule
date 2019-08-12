@@ -7,7 +7,7 @@ let data = JSON.parse(localStorage.getItem("schedule")) || {};
 let schedule = JSON.parse(localStorage.getItem("schedule")) || {};
 let grade_name = localStorage.getItem("name") || "";
 let current_day = parseInt(localStorage.getItem("day")) || 0;
-let week_type = "even";
+let week_type = localStorage.getItem("week") || "even";
 let currentPreparePage = 0;
 const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
 
@@ -18,6 +18,12 @@ function selectMenuOption(link) {
     links[link].setAttribute('class', 'active');
     current_day = parseInt(links[link].getAttribute('data-day'));
     displaySchedule(current_day);
+}
+
+if(week_type === "even") {
+    document.querySelector("#week-btn").innerHTML = "Parzysty";
+} else {
+    document.querySelector("#week-btn").innerHTML = "Nieparzysty";
 }
 
 for(let i = 0; i <= links.length - 1; i++) {
@@ -244,6 +250,7 @@ function displaySchedule(d) {
     let date = new Date();
     let date_timestamp = date.getHours()*60 + date.getMinutes();
     let day_of_week = date.getDay() - 1;
+    let is_next_lesson = false;
 
     for(let activity of activities) {
         let startHour = activity.getAttribute("data-start").split(":");
@@ -256,13 +263,40 @@ function displaySchedule(d) {
 
         if(date_timestamp >= start_timestamp && date_timestamp < end_timestamp && current_day === day_of_week) {
             let difference = (end_timestamp - date_timestamp);
-            let time_info = "Pozostało";
 
-            if(difference === 1) {
-                time_info = "Pozostała";
+            let hours = Math.floor(difference/60);
+            let hours_info = hours + " godz. ";
+            let minutes_info = difference%60 + " min";
+
+            if(hours === 0) {
+                hours_info = "";
             }
 
-            activity.querySelector(".time").innerHTML = time_info + " <b>" + difference + "</b> min";
+            if(difference === 0) {
+                minutes_info = "";
+            }
+
+            activity.querySelector(".time").innerHTML = "Kończy się za " + hours_info + minutes_info;
+            activity.classList.add("active");
+            is_next_lesson = true;
+        }
+        if(date_timestamp < start_timestamp && is_next_lesson === false && current_day === day_of_week) {
+            let difference = start_timestamp - date_timestamp;
+
+            let hours = Math.floor(difference/60);
+            let hours_info = hours + " godz. ";
+            let minutes_info = difference%60 + " min";
+
+            if(hours === 0) {
+                hours_info = "";
+            }
+
+            if(difference === 0) {
+                minutes_info = "";
+            }
+
+            activity.querySelector(".time").innerHTML = "Zaczyna się za " + hours_info + minutes_info;
+            is_next_lesson = true;
         }
     }
 }
@@ -271,9 +305,11 @@ function changeWeek(e) {
     if(week_type === "even") {
         week_type = "odd";
         e.innerHTML = "Nieparzysty";
+        localStorage.setItem("week", "odd");
     } else {
         week_type = "even";
         e.innerHTML = "Parzysty";
+        localStorage.setItem("week", "even");
     }
     displaySchedule(current_day);
 }

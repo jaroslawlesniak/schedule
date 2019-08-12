@@ -97,6 +97,11 @@ ul {
             font-size: 15px;
             color: #666;
         }
+
+        &.active {
+            background-color: #f0f8ff;
+            border: 2px solid #2c62a0;
+        }
     }
 
     .info {
@@ -171,6 +176,7 @@ ul {
             margin-top: 5px;
             background-color: #f8f8f8;
             width: calc(100% - 55px);
+            cursor: pointer;
 
             &:hover {
                 background-color: $theme-color;
@@ -204,6 +210,7 @@ ul {
         margin-left: 5px;
         background-color: #f8f8f8;
         width: calc(100% - 45px);
+        cursor: pointer;
     }
 
     .nextPage {

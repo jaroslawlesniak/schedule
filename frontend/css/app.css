@@ -92,6 +92,11 @@ ul li.active, ul li:hover {
   color: #666;
 }
 
+.container .option.active {
+  background-color: #f0f8ff;
+  border: 2px solid #2c62a0;
+}
+
 .container .info {
   font-size: 15px;
   color: #666;
@@ -164,6 +169,7 @@ ul li.active, ul li:hover {
   margin-top: 5px;
   background-color: #f8f8f8;
   width: calc(100% - 55px);
+  cursor: pointer;
 }
 
 .configure .grades .grade:hover {
@@ -196,6 +202,7 @@ ul li.active, ul li:hover {
   margin-left: 5px;
   background-color: #f8f8f8;
   width: calc(100% - 45px);
+  cursor: pointer;
 }
 
 .configure .nextPage {

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="./css/fontello.css" type="text/css">
     <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#0c3d75">
+    <link rel="shortcut icon" href="./img/icons/favicon.png" type="image/png">
 </head>
 <body>
     <header>
@@ -16,7 +17,7 @@
             <h1>
                 Plan zajęć <span id="name">11K1</span>
                 <button onclick="configureApp()"><i class="icon-cog"></i></button>
-                <button onclick="changeWeek(this)">Parzysty</button>
+                <button id="week-btn" onclick="changeWeek(this)">Parzysty</button>
             </h1>
             <ul class="navigation">
                 <li class="active" data-day="0">Poniedziałek</li>
