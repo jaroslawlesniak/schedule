@@ -123,7 +123,7 @@ ul li.active, ul li:hover {
   background-color: #fff;
   position: relative;
   z-index: 999;
-  padding: 15px;
+  padding: 5px 15px;
 }
 
 .configure h1 {

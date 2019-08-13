@@ -174,6 +174,7 @@ function prepareDay(d) {
 
         for(let chbox of checkboxex) {
             let activity = chbox.getAttribute('data-name');
+            let activity_name = chbox.getAttribute('data-activity');
             let classroom = chbox.getAttribute('data-classroom');
             let even_week = chbox.getAttribute('data-even_week');
             let odd_week = chbox.getAttribute('data-odd_week');
@@ -184,7 +185,8 @@ function prepareDay(d) {
                     "activity": activity,
                     "classroom": classroom,
                     "even_week": even_week,
-                    "odd_week": odd_week
+                    "odd_week": odd_week,
+                    "activity_name": activity_name
                 });
             } else {
                 schedule[day][hour] = [];
@@ -192,7 +194,8 @@ function prepareDay(d) {
                     "activity": activity,
                     "classroom": classroom,
                     "even_week": even_week,
-                    "odd_week": odd_week
+                    "odd_week": odd_week,
+                    "activity_name": activity_name
                 });
             }
         }
@@ -231,9 +234,19 @@ function prepareDay(d) {
             `;
             
             for(let activity of data[day][hour]) {
+                let checked = "";
+
+                if(schedule[day][hour]) {
+                    for(let config_activity of schedule[day][hour]) {
+                        if(activity.activity_name === config_activity.activity_name) {
+                            checked = "checked='checked'";
+                        }
+                    }
+                }
+
                 document.querySelector("#h" + hourIndex).innerHTML += `
                     <label class="option">
-                        <input type="checkbox" data-hour='${hour}' data-name='${activity.activity}' data-classroom='${activity.classroom}' data-even_week='${activity.even_week}' data-odd_week='${activity.odd_week}'/>${activity.activity_name}
+                        <input type="checkbox" ${checked} data-hour='${hour}' data-name='${activity.activity}' data-classroom='${activity.classroom}' data-activity='${activity.activity_name}' data-even_week='${activity.even_week}' data-odd_week='${activity.odd_week}'/>${activity.activity_name}
                     </label>
                 `;
             }
