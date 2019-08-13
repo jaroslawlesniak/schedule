@@ -10,7 +10,6 @@ let current_day = parseInt(localStorage.getItem("day")) || 0;
 let week_type = localStorage.getItem("week") || "even";
 let currentPreparePage = 0;
 const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
-
 let links = document.querySelectorAll('.navigation li');
 
 function selectMenuOption(link) {
@@ -34,14 +33,19 @@ for(let i = 0; i <= links.length - 1; i++) {
     })
 }
 
-if(url === null || (Object.keys(schedule).length === 0 && schedule.constructor === Object)) {
+if(applicationIsNotConfigured()) {
     configureApp();
 } else {
     document.querySelector("#name").innerHTML = grade_name;
+    document.querySelector("title").innerHTML = "Plan zajęć " + grade_name;
     selectMenuOption(current_day);
 }
 
 let grades = [];
+
+function applicationIsNotConfigured() {
+    return url === null || (Object.keys(schedule).length === 0 && schedule.constructor === Object)
+}
 
 function settingsPage() {
     document.querySelector("header").style.display = "none";
@@ -119,7 +123,10 @@ function configureApp(back_btn = false) {
     .then(data => {
         grades = data;
         loadGrades();
-    });
+    })
+    .catch(e => {
+        document.querySelector(".grades").innerHTML = "<span class='alert'>Brak połączenia z internetem</span>";
+    })
 }
 
 function reconfigureApp() {
@@ -129,6 +136,9 @@ function reconfigureApp() {
     .then(e => {
         data = e;
         prepareSchedule();
+    })
+    .catch(e => {
+        document.querySelector(".configure").innerHTML = "<span class='alert'>Brak połączenia z internetem</span>";
     });
 }
 
@@ -164,25 +174,26 @@ function prepareSchedule() {
 
     container.innerHTML += `
     <div class='header'>
-        <h1><i class="icon-left-open" onClick="prepareDay(${currentPreparePage - 1})"></i><span id="currentDay">Zajęcia</span></h1>
+        <h1><i class="icon-left-open" onClick="preparePrevDay()"></i><span id="currentDay">Zajęcia</span></h1>
     </div>
     <div class='activities_list'></div>
     <button class="nextPage" onclick="displayNextPreparePage()">Następny dzień</button>`;
     prepareDay(0);
 }
 
-function prepareDay(d) {
+function preparePrevDay() {
+    prepareDay(--currentPreparePage, false);
+}
+
+function prepareDay(d, update = true) {
     if(d < 0) {
-        if(url === null || (Object.keys(schedule).length === 0 && schedule.constructor === Object)) {
-            configureApp(false);
-        } else {
-            configureApp(true);
-        }
-        
+        configureApp(!applicationIsNotConfigured());
         return;
     }
     document.documentElement.scrollTop = 0;
-    if(d >= 1 && d <= 5) {
+    document.querySelector(".nextPage").innerHTML = "Następny dzień";
+
+    if(d >= 1 && d <= 5 && update) {
         let checkboxex = document.querySelectorAll('input:checked');
         let day = days[d - 1];
 
@@ -229,6 +240,7 @@ function prepareDay(d) {
             localStorage.setItem("name", grade_name);
             localStorage.setItem("data", JSON.stringify(data));
             localStorage.setItem("schedule", JSON.stringify(schedule));
+            document.querySelector("title").innerHTML = "Plan zajęć " + grade_name;
             selectMenuOption(0);
         }
     }
@@ -252,7 +264,7 @@ function prepareDay(d) {
             for(let activity of data[day][hour]) {
                 let checked = "";
 
-                if(schedule[day][hour]) {
+                if(schedule.hasOwnProperty(day) && schedule[day].hasOwnProperty(hour)) {
                     for(let config_activity of schedule[day][hour]) {
                         if(activity.activity_name === config_activity.activity_name) {
                             checked = "checked='checked'";

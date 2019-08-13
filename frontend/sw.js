@@ -4,6 +4,8 @@ const assets = [
     "./index.html",
     "./css/app.css",
     "./js/app.js",
+    "./sw.js",
+    "./manifest.json",
     "./img/icons/favicon.png",
     "./css/animation.css",
     "./css/fontello-codes.css",
@@ -13,27 +15,32 @@ const assets = [
     "./css/fontello.css",
     "./font/fontello.eot",
     "./font/fontello.svg",
-    "./font/fontello.tff",
+    "./font/fontello.ttf",
     "./font/fontello.woff",
-    "./font/fontello.woff2"
+    "./font/fontello.woff2",
+    "./font/fontello.woff2?27813901"
 ];
 
-self.addEventListener('install', e => {
-    e.waitUntil(
-        caches.open(cacheName).then(cache => {
-            cache.addAll(assets);
-        })
+self.addEventListener('install', event => {
+    event.waitUntil(
+      caches.open(cacheName).then(cache => {
+        return cache.addAll(assets);
+      })
     );
-});
+  });
 
-self.addEventListener('activate', e => {
+  self.addEventListener('activate', e => {
     
 });
 
-self.addEventListener('fetch', e => {
-    e.respondWith(
-        caches.match(e.request).then(cacheResource => {
-            return cacheResource || fetch(e.request);
-        })
+self.addEventListener('fetch', function(event) {
+    event.respondWith(
+      caches.open(cacheName).then(function(cache) {
+        return cache.match(event.request).then(function (response) {
+          return response || fetch(event.request).then(function(response) {
+            return response;
+          });
+        });
+      })
     );
-})
+  });

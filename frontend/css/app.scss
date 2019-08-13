@@ -150,12 +150,19 @@ ul {
 
     label.search {
         padding: 10px;
-        background-color: #f2f2f2;
+        background-color: #fff;
         border-radius: 10px;
         float: right;
         top: 5px;
         position: relative;
-        width: calc(100% - 135px);
+        width: 20px;
+        height: 20px;
+        transition: all .2s linear;
+
+        &:hover {
+            width: calc(100% - 135px);
+            background-color: #f2f2f2;
+        }
     }
 
     label.url {
@@ -227,9 +234,9 @@ ul {
             content: "";
             background-color: #fff;
             border: 2px solid #ddd;
-            padding: 7px;
+            padding: 5px;
             display: inline-block;
-            margin-top: 1px;
+            margin-top: 2px;
             position: relative;
             left: 50px;
         }
@@ -284,4 +291,11 @@ ul {
             border-bottom: 1px solid #ddd;
             padding: 25px;
       }
+  }
+
+  .alert {
+    color: #f44242;
+    padding: 50px 25px;
+    display: block;
+    text-align: center;
   }
