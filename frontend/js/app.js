@@ -14,6 +14,8 @@ const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
 let links = document.querySelectorAll('.navigation li');
 
 function selectMenuOption(link) {
+    document.querySelector(".configure").innerHTML = "";
+
     document.querySelector('.navigation .active').removeAttribute('class');
     links[link].setAttribute('class', 'active');
     current_day = parseInt(links[link].getAttribute('data-day'));
@@ -52,18 +54,18 @@ function settingsPage() {
 
     container.innerHTML = `
          <div class="header">
-            <h1>Ustawienia</h1>
+            <h1><i class="icon-left-open" onClick="selectMenuOption(${current_day})"></i>Ustawienia</h1>
         </div>
         <div class="settings">
             <button id="update-btn" onClick="ckeckUpdates()">Sprawdź aktualizację planu</button>
             <button onClick="reconfigureApp()">Konfiguruj zajęcia</button>
-            <button onClick="configureApp()">Zmień grupę</button>
+            <button onClick="configureApp(true)">Zmień grupę</button>
         </div>
     `;
 }
 
 function ckeckUpdates() {
-    document.querySelector("#update-btn").innerHTML = "<div class='loader small-inline'></div>Sprawdzanie";
+    document.querySelector("#update-btn").innerHTML = "<div class='loader small-inline'></div>Sprawdzanie ...";
 
     fetch("https://api.jaroslawlesniak.pl/schedule/parser.php?url=" + url)
     .then(e => e.json())
@@ -85,7 +87,7 @@ function ckeckUpdates() {
     });
 }
 
-function configureApp() {
+function configureApp(back_btn = false) {
     document.querySelector("header").style.display = "none";
     document.querySelector(".container").innerHTML = "";
     let container = document.querySelector(".configure");
@@ -94,10 +96,16 @@ function configureApp() {
     container.style.display = "block";
     currentPreparePage = 0;
 
+    let back = "";
+
+    if(back_btn) {
+        back = `<i class="icon-left-open" onClick="settingsPage()"></i>`;
+    }
+
     container.innerHTML = `
          <div class="header">
-            <h1>Grupa</h1>
-            <label>
+            <h1>${back}Grupa</h1>
+            <label class="search">
                 <i class="icon-search"></i>
                 <input type="text" name="url" placeholder="Wyszukaj nazwę grupy" onInput="loadGrades(this.value)" autocomplete="off"/>
             </label>
@@ -156,8 +164,7 @@ function prepareSchedule() {
 
     container.innerHTML += `
     <div class='header'>
-        <h1 id="currentDay">Zajęcia</h1>
-        <div class="additional_info">Zaznacz wszystkie swoje zajęcia</div>
+        <h1><i class="icon-left-open" onClick="prepareDay(${currentPreparePage - 1})"></i><span id="currentDay">Zajęcia</span></h1>
     </div>
     <div class='activities_list'></div>
     <button class="nextPage" onclick="displayNextPreparePage()">Następny dzień</button>`;
@@ -165,6 +172,15 @@ function prepareSchedule() {
 }
 
 function prepareDay(d) {
+    if(d < 0) {
+        if(url === null || (Object.keys(schedule).length === 0 && schedule.constructor === Object)) {
+            configureApp(false);
+        } else {
+            configureApp(true);
+        }
+        
+        return;
+    }
     document.documentElement.scrollTop = 0;
     if(d >= 1 && d <= 5) {
         let checkboxex = document.querySelectorAll('input:checked');

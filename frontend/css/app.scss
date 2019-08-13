@@ -130,6 +130,13 @@ ul {
         position: relative;
         z-index: 999;
         padding: 5px 15px;
+
+        h1 {
+            i {
+                margin-right: 15px;
+                color: $theme-color;
+            }
+        }
     }
 
     h1 {
@@ -138,6 +145,17 @@ ul {
         font-weight: bold;
         font-size: 16px;
         color: #333;
+        display: inline-block;
+    }
+
+    label.search {
+        padding: 10px;
+        background-color: #f2f2f2;
+        border-radius: 10px;
+        float: right;
+        top: 5px;
+        position: relative;
+        width: calc(100% - 135px);
     }
 
     label.url {
@@ -146,28 +164,23 @@ ul {
 
     input[type="text"], .additional_info {
         color: #333;
-        padding: 10px 0px;
         outline: none;
         display: inline-block;
         border: none;
-        font-size: 16px;
-        width: calc(100% - 45px);
         background-color: inherit;
-    }
-
-    .additional_info {
-        padding: 10px;
+        font-size: 14px;
+        width: calc(100% - 25px);
     }
 
     .icon-search {
-        width: 30px;
         display: inline-block;
-        text-align: right;
         color: #333;
+        font-size: 14px;
     }
 
     .additional_info {
         color: #666;
+        margin-left: 10px;
     }
 
     .grades {
@@ -181,26 +194,16 @@ ul {
     }
 
     .activities_list {
-        padding: 25px 15px;
-
         > span {
             margin-top: 25px;
             color: #666;
-
-            &:first-child {
-                margin-top: 0px;
-            }
+            padding: 15px;
         }
     }
 
     .option {
         display: block;
-        padding: 15px 10px;
-        margin-top: 5px;
-        border-left: 5px solid $theme-color;
-        margin-left: 5px;
-        background-color: #f8f8f8;
-        width: calc(100% - 45px);
+        padding: 15px;
         cursor: pointer;
     }
 
@@ -212,6 +215,31 @@ ul {
         border: none;
         outline: none;
         padding: 20px;
+        margin-top: 25px;
+    }
+
+    input[type="checkbox"] {
+        margin-right: 15px;
+        position: relative;
+        left: -50px;
+       
+        &::before {
+            content: "";
+            background-color: #fff;
+            border: 2px solid #ddd;
+            padding: 7px;
+            display: inline-block;
+            margin-top: 1px;
+            position: relative;
+            left: 50px;
+        }
+
+        &:checked {
+            &::before {
+                border-color: $theme-color;
+                background-color: $theme-color;
+            }
+        }
     }
 }
 
