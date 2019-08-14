@@ -88,6 +88,9 @@ function ckeckUpdates() {
                 alert("Brak dostępnych aktualizacji");
             }
         }, 300)
+    }).catch(e => {
+        alert("Brak połączenia z internetem");
+        document.querySelector("#update-btn").innerHTML = "Sprawdź aktualizację planu";
     });
 }
 
@@ -138,7 +141,11 @@ function reconfigureApp() {
         prepareSchedule();
     })
     .catch(e => {
-        document.querySelector(".configure").innerHTML = "<span class='alert'>Brak połączenia z internetem</span>";
+        document.querySelector(".configure").innerHTML = `
+        <div class='header'>
+            <h1><i class="icon-left-open" onclick="settingsPage()"></i>Zajęcia</h1>
+        </div>
+        <span class='alert'>Brak połączenia z internetem</span>`;
     });
 }
 
