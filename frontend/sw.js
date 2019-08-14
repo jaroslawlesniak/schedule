@@ -1,15 +1,8 @@
 const cacheName = 'static';
-const assets = [
-    
-];
 
-self.addEventListener('install', event => {
-    
-});
+self.addEventListener('install', (event) => {});
 
-  self.addEventListener('activate', e => {
-    
-});
+self.addEventListener('activate', (event) => {});
 
 self.addEventListener('fetch', (event) => {
   event.respondWith(
